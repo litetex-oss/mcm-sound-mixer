@@ -16,9 +16,9 @@
   "icon": "assets/icon.png",
   "environment": "*",
   "mixins": [
-    "template-placeholder.mixins.json"
+    "sound-mixer.mixins.json"
   ],
-  "accessWidener": "template-placeholder.classtweaker",
+  "accessWidener": "sound-mixer.classtweaker",
   "recommends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": ">=${minecraft_version}"
