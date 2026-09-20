@@ -7,7 +7,7 @@
 
 <!-- modrinth_exclude.end -->
 
-TODO
+Easily adjust sound volumes
 
 <!-- modrinth_exclude.start -->
 
