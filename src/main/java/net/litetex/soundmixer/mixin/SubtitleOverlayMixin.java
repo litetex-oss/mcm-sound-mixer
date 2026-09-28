@@ -27,7 +27,7 @@ public abstract class SubtitleOverlayMixin
 		final Operation<Component> original,
 		final SoundInstance sound)
 	{
-		return SoundMixer.instance().isShowSubtitleIds()
+		return SoundMixer.instance().isShowIds()
 			? Component.translationArg(sound.getIdentifier())
 			: original.call(instance);
 	}

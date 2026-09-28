@@ -33,7 +33,7 @@ public class SoundMixer
 		SoundMixer.instance = instance;
 	}
 	
-	private boolean showSubtitleIds;
+	private boolean showIds;
 	
 	private final SortedMap<Identifier, Float> soundIdVolumes;
 	private final Set<Identifier> mutedSounds;
@@ -50,7 +50,7 @@ public class SoundMixer
 		this.config = config;
 		this.saveConfigFunc = saveConfigFunc;
 		
-		this.showSubtitleIds = config.isShowSubtitleIds();
+		this.showIds = config.isShowIds();
 		
 		this.soundIdVolumes = config.getSoundIdVolumes().entrySet()
 			.stream()
@@ -129,14 +129,14 @@ public class SoundMixer
 		return this.soundIdVolumes;
 	}
 	
-	public boolean isShowSubtitleIds()
+	public boolean isShowIds()
 	{
-		return this.showSubtitleIds;
+		return this.showIds;
 	}
 	
-	public void setShowSubtitleIds(final boolean showSubtitleIds)
+	public void setShowIds(final boolean showIds)
 	{
-		this.showSubtitleIds = showSubtitleIds;
+		this.showIds = showIds;
 		this.requireConfigSave = true;
 	}
 	
@@ -147,7 +147,7 @@ public class SoundMixer
 			return;
 		}
 		
-		this.config.setShowSubtitleIds(this.showSubtitleIds);
+		this.config.setShowIds(this.showIds);
 		this.config.getSoundIdVolumes().clear();
 		this.config.getSoundIdVolumes().putAll(this.soundIdVolumes.entrySet()
 			.stream()

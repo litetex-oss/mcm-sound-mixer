@@ -34,7 +34,7 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 	private final EditBox searchField;
 	private final CycleButton<Boolean> btnOnlyShowModified;
 	private final VolumeList volumeList;
-	private final CycleButton<Boolean> btnSubtitles;
+	private final CycleButton<Boolean> btnShowIds;
 	
 	private boolean showModifiedOnly;
 	
@@ -79,14 +79,14 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 		
 		this.volumeList = new VolumeList(this.minecraft);
 		
-		this.btnSubtitles = CycleButton.onOffBuilder(this.soundMixer.isShowSubtitleIds())
+		this.btnShowIds = CycleButton.onOffBuilder(this.soundMixer.isShowIds())
 			.withTooltip(_ -> Tooltip.create(
-				Component.literal("Instead of existing translations.\n"
+				Component.literal("Instead of existing sound translations.\n"
 					+ "Also affects the in-game subtitle overlay.")))
 			.create(
-				Component.literal("Always show subtitle ids"),
+				Component.literal("Always show ids"),
 				(_, enabled) -> {
-					this.soundMixer.setShowSubtitleIds(enabled);
+					this.soundMixer.setShowIds(enabled);
 					this.volumeList.updateShowIdentifier(enabled);
 				});
 	}
@@ -96,7 +96,7 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 	{
 		this.addRenderableWidget(this.searchField);
 		this.addRenderableWidget(this.btnOnlyShowModified);
-		this.addRenderableWidget(this.btnSubtitles);
+		this.addRenderableWidget(this.btnShowIds);
 		
 		this.addRenderableWidget(this.volumeList);
 		this.refreshItems();
@@ -119,7 +119,7 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 				this.cachedSoundData.computeIfAbsent(e.getKey(), id -> SoundData.create(id, this.soundManager)),
 				e.getValue()));
 		
-		final boolean showSubtitleIds = SoundMixer.instance().isShowSubtitleIds();
+		final boolean showSubtitleIds = SoundMixer.instance().isShowIds();
 		
 		if(!this.searchField.getValue().isEmpty())
 		{
@@ -167,7 +167,7 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 	{
 		final LinearLayout footerLayout = this.layout.addToFooter(LinearLayout.horizontal().spacing(8));
 		
-		footerLayout.addChild(this.btnSubtitles);
+		footerLayout.addChild(this.btnShowIds);
 		footerLayout.addChild(Button.builder(CommonComponents.GUI_DONE, _ -> this.onClose()).build());
 	}
 }

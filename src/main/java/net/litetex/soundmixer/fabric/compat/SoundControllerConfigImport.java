@@ -37,7 +37,7 @@ public final class SoundControllerConfigImport
 			final JsonObject root = JsonParser.parseString(Files.readString(path)).getAsJsonObject();
 			Optional.ofNullable(root.get("subtitlesEnabled"))
 				.map(JsonElement::getAsBoolean)
-				.ifPresent(config::setShowSubtitleIds);
+				.ifPresent(config::setShowIds);
 			
 			Optional.ofNullable(root.get("sounds"))
 				.map(JsonElement::getAsJsonArray)

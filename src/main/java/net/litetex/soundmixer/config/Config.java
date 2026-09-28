@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 public class Config
 {
-	private boolean showSubtitleIds;
+	private boolean showIds;
 	private Map<String, Float> soundIdVolumes = new TreeMap<>();
 	
 	public static Config createDefault()
@@ -14,14 +14,14 @@ public class Config
 		return new Config();
 	}
 	
-	public boolean isShowSubtitleIds()
+	public boolean isShowIds()
 	{
-		return this.showSubtitleIds;
+		return this.showIds;
 	}
 	
-	public void setShowSubtitleIds(final boolean showSubtitleIds)
+	public void setShowIds(final boolean showIds)
 	{
-		this.showSubtitleIds = showSubtitleIds;
+		this.showIds = showIds;
 	}
 	
 	public Map<String, Float> getSoundIdVolumes()
