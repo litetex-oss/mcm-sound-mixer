@@ -15,6 +15,14 @@
   "license": "${license_spdx_id}",
   "icon": "assets/icon.png",
   "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.litetex.soundmixer.fabric.FabricSoundMixer"
+    ],
+    "modmenu": [
+      "net.litetex.soundmixer.fabric.compat.ModMenuCompatibility"
+    ]
+  },
   "mixins": [
     "sound-mixer.mixins.json"
   ],
@@ -22,6 +30,9 @@
   "recommends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": ">=${minecraft_version}"
+  },
+  "breaks": {
+    "soundcontroller": "*"
   },
   "custom": {
     "modmenu": {
