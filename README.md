@@ -3,27 +3,22 @@
 [![Version](https://img.shields.io/modrinth/v/sound-mixer)](https://modrinth.com/mod/sound-mixer)
 [![Build](https://img.shields.io/github/actions/workflow/status/litetex-oss/mcm-sound-mixer/check-build.yml?branch=dev)](https://github.com/litetex-oss/mcm-sound-mixer/actions/workflows/check-build.yml?query=branch%3Adev)
 
-# sound-mixer
+# Sound Mixer
 
 <!-- modrinth_exclude.end -->
 
-A simple and minimalistic mod that allows you to easily adjust sound volumes.
+A simple, minimalistic and straight-forward mod that allows you to easily adjust sound volumes.
 
-<details><summary>Why another Sound mod?</summary>
+### Why another mod?
 
-I created this because the existing mods didn't convince me:
-* Extreme sound muffler
-  * Unintuitive UI
-* Sounds be gone
-  * Lack of volume adjustment
-  * Telemetry and AI
-* Sound Controller
-  * Quality of codebase
-  * Not needed feature
+The existing mods I previously tried didn't convince me and inspired the creation of this mod.
 
-</details>
-
-<sub>Disclaimer: This mod was inspired by [Sound Controller](https://github.com/BVengo/sound-controller).</sub>
+Some reasons:
+* Unintuitive UI
+* Volume not adjustable
+* Telemetry and AI usage
+* Quality of codebase
+* Excess/Niche functionallity
 
 <!-- modrinth_exclude.start -->
 
