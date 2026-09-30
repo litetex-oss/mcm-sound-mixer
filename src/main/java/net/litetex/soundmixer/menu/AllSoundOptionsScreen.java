@@ -1,5 +1,6 @@
 package net.litetex.soundmixer.menu;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -17,6 +18,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -28,15 +30,21 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 {
 	public static final Component TITLE = Component.literal("Individual Sounds");
 	
+	private static final Comparator<Map.Entry<SoundInstance, Integer>> SOUND_DEL_TIME_REVERSE_COMPARATOR =
+		Map.Entry.<SoundInstance, Integer>comparingByValue().reversed();
+	private static final Identifier UI_BUTTON_CLICK =
+		Identifier.fromNamespaceAndPath("minecraft", "ui.button.click");
+	
 	private final Map<Identifier, SoundData> cachedSoundData = HashMap.newHashMap(1_000);
 	private final Set<Identifier> allSoundEventIdsSorted;
 	
 	private final EditBox searchField;
-	private final CycleButton<Boolean> btnOnlyShowModified;
+	private final CycleButton<Filter> btnFilter;
+	@SuppressWarnings("checkstyle:IllegalIdentifierName")
 	private final VolumeList volumeList;
 	private final CycleButton<Boolean> btnShowIds;
 	
-	private boolean showModifiedOnly;
+	private Filter filter = Filter.ALL;
 	
 	private final SoundManager soundManager;
 	private final OptionsSoundManager optionsSoundManager;
@@ -63,19 +71,25 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 			Component.literal("Search for sound..."));
 		this.searchField.setResponder(_ -> this.refreshItems());
 		
-		this.btnOnlyShowModified = CycleButton.builder(
-				b -> Component.literal(b ? "Only modified" : "All"),
-				this.showModifiedOnly)
-			.withValues(false, true)
+		this.btnFilter = CycleButton.builder(
+				f -> Component.literal(
+					switch(f)
+					{
+						case ALL -> "All";
+						case MODIFIED -> "Modified";
+						case ACTIVE -> "Active";
+					}),
+				this.filter)
+			.withValues(Filter.values())
 			.create(
 				Component.literal("Show"),
-				(_, enabled) -> {
-					this.showModifiedOnly = enabled;
+				(_, newValue) -> {
+					this.filter = newValue;
 					this.refreshItems();
 				}
 			);
-		this.btnOnlyShowModified.setY(35);
-		this.btnOnlyShowModified.setWidth(120);
+		this.btnFilter.setY(35);
+		this.btnFilter.setWidth(120);
 		
 		this.volumeList = new VolumeList(this.minecraft);
 		
@@ -95,7 +109,7 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 	protected void addContents()
 	{
 		this.addRenderableWidget(this.searchField);
-		this.addRenderableWidget(this.btnOnlyShowModified);
+		this.addRenderableWidget(this.btnFilter);
 		this.addRenderableWidget(this.btnShowIds);
 		
 		this.addRenderableWidget(this.volumeList);
@@ -111,10 +125,7 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 	
 	private void refreshItems()
 	{
-		Stream<Map.Entry<SoundData, Float>> items = (this.showModifiedOnly
-			? this.soundMixer.allSoundIdVolumes().entrySet().stream()
-			: this.allSoundEventIdsSorted.stream()
-			.map(id -> Map.entry(id, this.soundMixer.getAdjustedVolume(id, SoundMixer.DEFAULT_VOLUME))))
+		Stream<Map.Entry<SoundData, Float>> items = this.getItemsForCurrentFilter()
 			.map(e -> Map.entry(
 				this.cachedSoundData.computeIfAbsent(e.getKey(), id -> SoundData.create(id, this.soundManager)),
 				e.getValue()));
@@ -139,6 +150,26 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 			this.optionsSoundManager);
 	}
 	
+	private Stream<Map.Entry<Identifier, Float>> getItemsForCurrentFilter()
+	{
+		if(this.filter == Filter.MODIFIED)
+		{
+			return this.soundMixer.allSoundIdVolumes().entrySet().stream();
+		}
+		
+		final Stream<Identifier> ids = this.filter == Filter.ACTIVE
+			? this.soundManager.soundEngine.soundDeleteTime.entrySet().stream()
+			.sorted(SOUND_DEL_TIME_REVERSE_COMPARATOR)
+			.map(Map.Entry::getKey)
+			.map(SoundInstance::getIdentifier)
+			// This should never be shown
+			.filter(id -> !UI_BUTTON_CLICK.equals(id))
+			.distinct()
+			: this.allSoundEventIdsSorted.stream();
+		
+		return ids.map(id -> Map.entry(id, this.soundMixer.getAdjustedVolume(id, SoundMixer.DEFAULT_VOLUME)));
+	}
+	
 	@Override
 	public void removed()
 	{
@@ -157,9 +188,9 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 			this.volumeList.getX(),
 			this.layout.getHeaderHeight() + 28);
 		
-		this.searchField.setWidth(this.volumeList.getRowWidth() - 8 - this.btnOnlyShowModified.getWidth());
+		this.searchField.setWidth(this.volumeList.getRowWidth() - 8 - this.btnFilter.getWidth());
 		
-		this.btnOnlyShowModified.setX(this.searchField.getRight() + 8);
+		this.btnFilter.setX(this.searchField.getRight() + 8);
 	}
 	
 	@Override
@@ -169,5 +200,12 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 		
 		footerLayout.addChild(this.btnShowIds);
 		footerLayout.addChild(Button.builder(CommonComponents.GUI_DONE, _ -> this.onClose()).build());
+	}
+	
+	enum Filter
+	{
+		ALL,
+		MODIFIED,
+		ACTIVE
 	}
 }
