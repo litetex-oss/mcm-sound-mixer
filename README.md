@@ -7,7 +7,23 @@
 
 <!-- modrinth_exclude.end -->
 
-Easily adjust sound volumes
+A simple and minimalistic mod that allows you to easily adjust sound volumes.
+
+<details><summary>Why another Sound mod?</summary>
+
+I created this because the existing mods didn't convince me:
+* Extreme sound muffler
+  * Unintuitive UI
+* Sounds be gone
+  * Lack of volume adjustment
+  * Telemetry and AI
+* Sound Controller
+  * Quality of codebase
+  * Not needed feature
+
+</details>
+
+<sub>Disclaimer: This mod was inspired by [Sound Controller](https://github.com/BVengo/sound-controller).</sub>
 
 <!-- modrinth_exclude.start -->
 
