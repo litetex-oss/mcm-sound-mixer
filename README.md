@@ -9,7 +9,7 @@
 
 A simple, minimalistic and straight-forward mod that allows you to easily adjust sound volumes.
 
-### Why another mod?
+#### Why another mod?
 
 The existing mods I previously tried didn't convince me and inspired the creation of this mod.
 
