@@ -218,7 +218,9 @@ modrinth {
     dependencies {
         required.project 'fabric-api'
         optional.project 'modmenu'
-        incompatible.project 'soundcontroller'
+        incompatible.project 'sound-controller'
+        incompatible.project 'extreme_sound_muffler'
+        incompatible.project 'soundsbegone'
     }
 }
 
