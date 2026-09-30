@@ -72,7 +72,7 @@ public class SoundMixer
 		
 		this.mutedSounds = this.soundIdVolumes.entrySet()
 			.stream()
-			.filter(e -> e.getValue() == 0f)
+			.filter(e -> e.getValue() == MIN_VOLUME)
 			.map(Map.Entry::getKey)
 			.collect(Collectors.toSet());
 	}
@@ -91,7 +91,7 @@ public class SoundMixer
 		}
 		
 		final Float previousValue = this.soundIdVolumes.put(id, value);
-		if(value == 0.0f)
+		if(value == MIN_VOLUME)
 		{
 			this.mutedSounds.add(id);
 		}
