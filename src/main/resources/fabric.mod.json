@@ -7,6 +7,14 @@
   "authors": [
     "litetex"
   ],
+  "contributors": [
+    {
+      "name": "BVengo & Sound Controller mod contributors",
+      "contact": {
+        "homepage": "https://github.com/BVengo/sound-controller"
+      }
+    }
+  ],
   "contact": {
     "homepage": "https://modrinth.com/mod/${id}",
     "sources": "https://github.com/litetex-oss/mcm-${id}",
