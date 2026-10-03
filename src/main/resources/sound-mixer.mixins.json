@@ -5,6 +5,11 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
   ],
+  "client": [
+    "SoundEngineMixin",
+    "SoundOptionsScreenMixin",
+    "SubtitleOverlayMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },
