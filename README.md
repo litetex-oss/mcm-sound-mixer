@@ -18,7 +18,7 @@ Some reasons:
 * Volume not adjustable
 * Telemetry and AI usage
 * Quality of codebase
-* Excess/Niche functionallity
+* Excessive niche functionallity
 
 <!-- modrinth_exclude.start -->
 

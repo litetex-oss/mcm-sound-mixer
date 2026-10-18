@@ -19,10 +19,12 @@ import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundSource;
 
 
 @SuppressWarnings("checkstyle:MagicNumber")
@@ -158,16 +160,38 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 		}
 		
 		final Stream<Identifier> ids = this.filter == Filter.ACTIVE
-			? this.soundManager.soundEngine.soundDeleteTime.entrySet().stream()
-			.sorted(SOUND_DEL_TIME_REVERSE_COMPARATOR)
-			.map(Map.Entry::getKey)
-			.map(SoundInstance::getIdentifier)
-			// This should never be shown
-			.filter(id -> !UI_BUTTON_CLICK.equals(id))
-			.distinct()
+			? this.getActiveSoundIds()
 			: this.allSoundEventIdsSorted.stream();
 		
 		return ids.map(id -> Map.entry(id, this.soundMixer.getAdjustedVolume(id, SoundMixer.DEFAULT_VOLUME)));
+	}
+	
+	private Stream<Identifier> getActiveSoundIds()
+	{
+		final SoundEngine soundEngine = this.soundManager.soundEngine;
+		return soundEngine.soundDeleteTime.entrySet().stream()
+			.sorted(SOUND_DEL_TIME_REVERSE_COMPARATOR)
+			.map(Map.Entry::getKey)
+			.filter(s -> {
+				// If the sound can't play silently -> proceed
+				if(!s.canStartSilent() && s.getSource() != SoundSource.MUSIC)
+				{
+					return true;
+				}
+				
+				// Check if the sound plays silently (e.g. music)
+				
+				if(this.soundMixer.isMuted(s))
+				{
+					return false;
+				}
+				
+				return soundEngine.calculateVolume(s) != SoundMixer.MIN_VOLUME;
+			})
+			.map(SoundInstance::getIdentifier)
+			// This should never be shown
+			.filter(id -> !UI_BUTTON_CLICK.equals(id))
+			.distinct();
 	}
 	
 	@Override
