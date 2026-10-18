@@ -173,6 +173,7 @@ public class AllSoundOptionsScreen extends OptionsSubScreen
 			.sorted(SOUND_DEL_TIME_REVERSE_COMPARATOR)
 			.map(Map.Entry::getKey)
 			.filter(s -> {
+				// Derived from SoundEngine#play
 				// If the sound can't play silently -> proceed
 				if(!s.canStartSilent() && s.getSource() != SoundSource.MUSIC)
 				{
